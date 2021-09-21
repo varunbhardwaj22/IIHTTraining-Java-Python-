@@ -14,15 +14,16 @@ public class Numbers {
     public static void main(String args[]) {
       Scanner sc=new Scanner(System.in);
       int num= sc.nextInt();
+      int temp=num;
       int count=0;
       int result;
-      if(num<2){
-                       System.out.println(num);
-      }else{
       while(num!=0){
           num=num/10;
           count++;
       }
+                if(count<2){
+                System.out.println(count);
+                }else{
                  if(count%2==0){
                     result=(int)Math.pow(count,2); 
                     System.out.println(count+","+result);
