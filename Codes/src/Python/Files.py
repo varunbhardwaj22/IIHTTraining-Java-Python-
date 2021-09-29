@@ -38,7 +38,7 @@ with open("entry_details.txt", "w") as f :
 # reading from the file : 
 print("The entries in the file are : ")
 entries = list() 
-with open("entry_details.txt", "r") as f :
+with open("Entry_Details.txt", "r") as f :
     entries = f.readlines()[1:]
     entries = tuple(map(lambda entry : tuple(entry.split(",")), entries ))
 
