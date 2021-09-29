@@ -1,61 +1,85 @@
-def sort_dict(nums_dict) :
-    # helper functions 
-    def merge(left_keys, left_vals, right_keys, right_vals) :
-        i, j = 0, 0
-        merged_keys = list()
-        merged_vals = list()
-        while i < len(left_keys) and j < len(right_keys) :
-            if left_vals[i] <= right_vals[j] :
-                merged_keys.append(left_keys[i])
-                merged_vals.append(left_vals[i])
-                i += 1
-            else : 
-                merged_keys.append(right_keys[j])
-                merged_vals.append(right_vals[j])
-                j += 1
-        while i < len(left_keys) :
-            merged_keys.append(left_keys[i])
-            merged_vals.append(left_vals[i])
+# Assignment : Calculate the last 3 transaction(mini statement) done on a debit card w.r.to the amount available, 
+#               note he cannot withdraw more than the balance & available currency notes
+#               e.g. if an atm has 100 * 2 , 200 * 3, 500 * 10 = 200 + 600 + 5000 = 5800 
+#                   the total withdrawal amount cannot be more than than 90 % of the ATM cash e.g. as per above 90% of 5800 
+#                   (i.e. 5220 round off 5200 since we dont have 20 rs notes)
+# Assumptions : 
+#                   1. Currency in the ATM is fixed 
+#                   2. Balance for the Debit Card is predeclared
+#                   3. No of transactions to be shown is fixed to last 3
+
+
+atm_money = {1000: 5, 500: 10, 200: 10}
+total_amt = 0
+for k, v in atm_money.items():
+    total_amt += k * v
+
+transactions = list()
+
+balance = int(input("Enter the balance : "))
+
+
+def withdraw():
+    global total_amt
+    global balance
+    global transactions
+    amt = int(input("Enter the withdraw amount : "))
+    permitted_amt = 0.9 * total_amt
+    if amt > permitted_amt:
+        return "Sorry, transaction not permitted. Maximum amount permitted is {} ".format(permitted_amt)
+    else:
+        temp_amt = amt
+        denominations = list(atm_money.keys())
+        i = 0
+        while temp_amt > 0:
+            if i == len(denominations) :
+                return "Unavailable notes"
+            notes = temp_amt // denominations[i]
+            if notes > atm_money[denominations[i]]:
+                return "Transaction can not be done."
+            temp_amt = temp_amt % denominations[i]
+            atm_money[denominations[i]] -= notes
             i += 1
-        while j < len(right_keys) :
-            merged_keys.append(right_keys[j])
-            merged_vals.append(right_vals[j])
-            j += 1
-        return merged_keys, merged_vals
-    def merge_sort(num_keys, num_vals) :
-        if len(num_keys) == 1 :
-            return num_keys, num_vals
-        else :
-            l = len(num_keys)
-            mid = l // 2
-            left_keys, left_vals = merge_sort(num_keys[:mid], num_vals[:mid])
-            right_keys, right_vals = merge_sort(num_keys[mid:], num_vals[mid:])
-            merged_keys, merged_vals = merge(left_keys, left_vals, right_keys, right_vals)
-        return merged_keys, merged_vals
-    
-    # converting dictionary items to list of keys and values separately 
-    def dict_to_list(num_dict) :
-        num_dict_keys = list()
-        num_dict_vals = list() 
-        for key, val in num_dict.items() :
-            num_dict_keys.append(key)
-            num_dict_vals.append(val)
-        return num_dict_keys, num_dict_vals
+            
+                
+        total_amt -= amt
+    balance -= amt
 
-    num_keys, num_vals = dict_to_list(nums_dict)
-    sorted_keys, sorted_vals = merge_sort(num_keys, num_vals)
-    sorted_dict = {key : val for key, val in zip(sorted_keys, sorted_vals)}
-    return sorted_dict
-print("Enter the number of the elements of the dictionary : ")
-n = int(input())
-print("Enter the items of the dictionary in key-value order : ")
-num_dict = dict()
-for _ in range(n) :
-    key, value = input().split()
-    num_dict[key] = value 
+    transaction = "Withdrawn Rs. {} ".format(amt)
+    transactions.append(transaction)
+    return transaction
 
-print("Before Sorting : ")
-print(num_dict)
-sorted_dict = sort_dict(num_dict)
-print("After Sorting : ")
-print(sorted_dict)
+
+def view_transaction_history():
+    global transactions
+    if len(transactions) == 0 :
+        print("No transactions made ")
+    elif len(transactions) < 3 : 
+        print("\nYour previous transactions : ")
+        i = len(transactions) - 1
+        while i > -1 :
+            print(transactions[i])
+            i -=1
+    else : 
+        i = len(transactions) - 1
+        print("\nYour Last 3 Transactions in reverse chronological order : ")
+        while i >= len(transactions) - 3 :
+            print(transactions[i])
+            i -=1
+
+
+def exit():
+    print("Exiting")
+
+
+choice = 1
+while choice < 3:
+    choice = int(
+        input("1. Withdraw Money\t2. View Transaction History\t3. Exit : \t"))
+    if choice == 1:
+        transaction_msg = withdraw()
+        print(transaction_msg)
+    elif choice == 2:
+        view_transaction_history()
+    else:
+        exit()

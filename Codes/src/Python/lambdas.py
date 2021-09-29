@@ -1,3 +1,10 @@
+# Assignment : Write a program to leverage closure / lambdas to perform - accept the choice from the user what step he wants to execute
+#               1. add a new element to the list - take the elements from the user
+#               2. create dict from the list 
+#               3. sort dict in descending order based on value 
+
+
+
 elements_list = list()
 elem_dict = dict()
 
