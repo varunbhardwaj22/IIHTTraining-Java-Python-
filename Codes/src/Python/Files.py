@@ -29,7 +29,7 @@ while entry != "exit" :
 # writing to the file :
 print("The entries to added to the file : ") 
 print(repr(entries))
-with open("entry_details.txt", "w") as f :
+with open("Entry_Details.txt", "w") as f :
     f.write("Name,Email,Phone_No\n")
     lines = [",".join(entry) for entry in entries]
     lines = [line + "\n" for line in lines ]
