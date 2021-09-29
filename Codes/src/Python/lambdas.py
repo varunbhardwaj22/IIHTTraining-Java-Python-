@@ -4,7 +4,6 @@
 #               3. sort dict in descending order based on value 
 
 
-
 elements_list = list()
 elem_dict = dict()
 
